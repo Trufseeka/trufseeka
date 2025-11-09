@@ -1,9 +1,363 @@
-<html>
-  <title>Trufseeka</title>
-  <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Trufseeka — Truth Seeking Hub</title>
+<style>
+  :root { --bg:#0f1115; --panel:#151922; --muted:#a7b0c0; --text:#e7ecf5; --accent:#7aa2f7; --danger:#ff6b6b; --ok:#67e8f9; --border:#232838; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; color:var(--text); background:linear-gradient(180deg,#0d0f14 0%, #0f1115 40%, #10131a 100%); height:100vh; display:grid; grid-template-columns: 300px 1fr; }
+  /* Sidebar */
+  aside { border-right:1px solid var(--border); background:var(--panel); height:100vh; overflow:auto; }
+  .brand { padding:16px 16px 8px; border-bottom:1px solid var(--border); }
+  .brand h1 { margin:0; font-size:18px; letter-spacing:.3px; }
+  .brand small { color:var(--muted); }
+  .actions { display:flex; gap:8px; padding:12px 16px; border-bottom:1px solid var(--border); }
+  .btn { cursor:pointer; border:1px solid var(--border); background:#0e121a; color:var(--text); padding:8px 10px; border-radius:8px; font-weight:600; transition:transform .04s ease, background .2s; }
+  .btn:hover { background:#121722; }
+  .btn:active { transform:translateY(1px); }
+  .btn.primary { border-color:rgba(122,162,247,.5); outline:1px solid rgba(122,162,247,.25); }
+  .btn.danger { border-color:rgba(255,107,107,.35); color:#ffd7d7; }
+  .search { padding:8px 16px 12px; border-bottom:1px solid var(--border); }
+  .search input { width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#0d1118; color:var(--text); }
+  .list { padding:8px; display:flex; flex-direction:column; gap:8px; }
+  .card { border:1px solid var(--border); background:#0c1017; padding:10px; border-radius:10px; cursor:pointer; }
+  .card.active { outline:2px solid var(--accent); }
+  .card h3 { margin:0 0 4px; font-size:14px; }
+  .meta { color:var(--muted); font-size:12px; display:flex; gap:10px; flex-wrap:wrap; }
+  /* Main */
+  main { display:grid; grid-template-rows: auto auto 1fr; height:100vh; }
+  .topbar { display:flex; gap:8px; align-items:center; padding:10px 14px; border-bottom:1px solid var(--border); background:rgba(21,25,34,.7); position:sticky; top:0; backdrop-filter: blur(6px); }
+  .topbar input.title { flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#0c1118; color:var(--text); font-weight:700; }
+  .status { margin-left:auto; font-size:12px; color:var(--muted); }
+  .toolbar { display:flex; gap:8px; padding:8px 14px; border-bottom:1px solid var(--border); background:#0e131b; }
+  .toolbar .btn { padding:6px 8px; font-weight:600; }
+  .editor { padding:12px 16px 120px; overflow:auto; }
+  .editable { min-height:calc(100vh - 220px); outline:none; padding:16px; border-radius:12px; background:#0b1017; border:1px solid var(--border); }
+  .editable:empty:before { content:"Start writing…"; color:#5f6b80; }
+  .footer { position:sticky; bottom:0; display:flex; gap:16px; align-items:center; justify-content:space-between; padding:10px 14px; border-top:1px solid var(--border); background:rgba(15,17,21,.9); }
+  .wordcount { color:var(--muted); }
+  .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:12px; padding:2px 6px; border-radius:6px; border:1px solid var(--border); background:#0a0e14; color:#cdd6f4; }
+  /* Tabs for planned features */
+  .tabs { display:flex; gap:8px; padding:8px 14px; border-bottom:1px solid var(--border); background:#0e131b; }
+  .tab { padding:6px 10px; border-radius:8px; border:1px solid var(--border); color:var(--muted); }
+  .tab.disabled { opacity:.6; cursor:not-allowed; }
+  .muted { color:var(--muted); }
+  .hidden { display:none !important; }
+  a.link { color:var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+  <aside>
+    <div class="brand">
+      <h1>Trufseeka</h1>
+      <small>Truth Seeking Hub</small>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="newDocBtn" title="Ctrl+N">New</button>
+      <button class="btn" id="saveBtn" title="Ctrl+S">Save</button>
+      <button class="btn" id="exportBtn" title="Ctrl+E">Export .txt</button>
+      <button class="btn danger" id="deleteBtn">Delete</button>
+    </div>
+    <div class="search">
+      <input id="searchInput" placeholder="Search titles…" />
+    </div>
+    <div class="list" id="docList" aria-label="Document library"></div>
+  </aside>
 
-   <h1 style="font-size: 40px;">Trufseeka</h1>
-    <p style="font-size: 40px;">This product is currently under construction and very much still a baby. I'm not fully sure what to build here. I know that I want to build an app for the truth-seeker. A central hub for all his truth-seeking related activities. It should include a writing editor, a first-principles truth-checker program that builds from physics knowledge and can verify any input from the ground up, an experiment designer, a "grand theory of everything" section where you can play with ideas and move around different texts or files like in a mind-map with the probably impossible to achieve goal of coming to an ultimate conclusion of about everything, and maybe also a link/text scraper to have all your reading stored in the Trufseeka app so that you can read all your articles and blog posts and papers and whatever in a beautiful reading experience that is well organized.</p>
-    
-  </body>
+  <main>
+    <div class="topbar">
+      <input class="title" id="titleInput" placeholder="Untitled document" />
+      <div class="status" id="status">Saved</div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab" style="border-color:rgba(122,162,247,.4); color:#cfe1ff;">Writing Editor</div>
+      <div class="tab disabled" title="Planned">Physics Fact Checker</div>
+      <div class="tab disabled" title="Planned">Reading List + Scraper</div>
+      <div class="tab disabled" title="Planned">Experiment Designer</div>
+      <div class="tab disabled" title="Planned">Grand Theory of Everything</div>
+      <div class="tab disabled" title="Planned">Simulations & Scientific Coding</div>
+    </div>
+
+    <section class="editor" id="editorSection">
+      <div id="editable" class="editable" contenteditable="true" spellcheck="true"></div>
+    </section>
+
+    <div class="toolbar" aria-label="Formatting toolbar">
+      <button class="btn" data-cmd="bold" title="Ctrl+B"><b>B</b></button>
+      <button class="btn" data-cmd="italic" title="Ctrl+I"><i>I</i></button>
+      <button class="btn" data-cmd="underline" title="Ctrl+U"><u>U</u></button>
+      <button class="btn" data-cmd="insertUnorderedList">• List</button>
+      <button class="btn" data-cmd="insertOrderedList">1. List</button>
+      <button class="btn" data-cmd="formatBlock" data-value="h2">H2</button>
+      <button class="btn" data-cmd="formatBlock" data-value="h3">H3</button>
+      <button class="btn" data-cmd="removeFormat">Clear</button>
+      <div class="muted">Shortcuts: <span class="kbd">Ctrl+S</span> save, <span class="kbd">Ctrl+E</span> export, <span class="kbd">Ctrl+N</span> new, <span class="kbd">Ctrl+B/I/U</span> format</div>
+    </div>
+
+    <div class="footer">
+      <div class="wordcount" id="wordCount">0 words • 0 chars</div>
+      <div class="muted">Data persists locally in your browser.</div>
+    </div>
+  </main>
+
+<script>
+/* --------------------------- Storage Model --------------------------- */
+/*
+  LocalStorage key: 'trufseeka_docs'
+  Document: { id, title, html, text, createdAt, updatedAt }
+*/
+const LS_KEY = 'trufseeka_docs';
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+function loadAll() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }
+  catch { return []; }
+}
+function saveAll(docs) {
+  localStorage.setItem(LS_KEY, JSON.stringify(docs));
+}
+
+function nowISO() { return new Date().toISOString(); }
+function fmt(dtISO) {
+  const d = new Date(dtISO);
+  return d.toLocaleString([], { year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+}
+
+function generateId() {
+  return 'd_' + Math.random().toString(36).slice(2,8) + Date.now().toString(36);
+}
+
+/* --------------------------- State --------------------------- */
+let docs = loadAll();
+let currentId = null;
+let dirty = false;
+let autosaveTimer = null;
+
+/* --------------------------- UI References --------------------------- */
+const docList = $('#docList');
+const titleInput = $('#titleInput');
+const editable = $('#editable');
+const status = $('#status');
+const wordCount = $('#wordCount');
+const searchInput = $('#searchInput');
+const saveBtn = $('#saveBtn');
+const exportBtn = $('#exportBtn');
+const deleteBtn = $('#deleteBtn');
+const newDocBtn = $('#newDocBtn');
+
+/* --------------------------- Rendering --------------------------- */
+function renderList(filter='') {
+  docList.innerHTML = '';
+  const q = filter.trim().toLowerCase();
+  const toShow = [...docs]
+    .filter(d => !q || d.title.toLowerCase().includes(q))
+    .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  if (toShow.length === 0) {
+    docList.innerHTML = `<div class="muted" style="padding:10px 12px;">No documents yet.</div>`;
+    return;
+  }
+  for (const d of toShow) {
+    const card = document.createElement('div');
+    card.className = 'card' + (d.id === currentId ? ' active' : '');
+    card.innerHTML = `
+      <h3>${escapeHtml(d.title || 'Untitled')}</h3>
+      <div class="meta">
+        <span>Created: ${fmt(d.createdAt)}</span>
+        <span>Updated: ${fmt(d.updatedAt)}</span>
+        <span>${countWords(d.text)} words</span>
+      </div>`;
+    card.onclick = () => { openDoc(d.id); };
+    docList.appendChild(card);
+  }
+}
+
+function renderEditor(doc) {
+  titleInput.value = doc.title || '';
+  editable.innerHTML = doc.html || '';
+  updateWordCount();
+  dirty = false;
+  setStatus('Saved');
+  renderList(searchInput.value);
+}
+
+function setStatus(s) { status.textContent = s; }
+
+/* --------------------------- CRUD --------------------------- */
+function createDoc() {
+  const id = generateId();
+  const t = nowISO();
+  const doc = { id, title:'', html:'', text:'', createdAt:t, updatedAt:t };
+  docs.push(doc);
+  saveAll(docs);
+  currentId = id;
+  renderEditor(doc);
+  renderList(searchInput.value);
+  // focus editor
+  setTimeout(() => editable.focus(), 0);
+}
+function openDoc(id) {
+  const doc = docs.find(d => d.id === id);
+  if (!doc) return;
+  currentId = id;
+  renderEditor(doc);
+}
+function updateCurrentFromUI() {
+  if (!currentId) return;
+  const doc = docs.find(d => d.id === currentId);
+  if (!doc) return;
+  doc.title = titleInput.value.trim();
+  doc.html = editable.innerHTML;
+  doc.text = editable.innerText;
+  doc.updatedAt = nowISO();
+  saveAll(docs);
+  dirty = false;
+  setStatus('Saved');
+  renderList(searchInput.value);
+}
+function deleteCurrent() {
+  if (!currentId) return;
+  const idx = docs.findIndex(d => d.id === currentId);
+  if (idx >= 0) {
+    docs.splice(idx,1);
+    saveAll(docs);
+  }
+  currentId = null;
+  // Open most recent or clear editor
+  if (docs.length) {
+    openDoc(docs.sort((a,b)=> new Date(b.updatedAt)-new Date(a.updatedAt))[0].id);
+  } else {
+    editable.innerHTML = '';
+    titleInput.value = '';
+    updateWordCount();
+    renderList(searchInput.value);
+  }
+}
+
+/* --------------------------- Autosave --------------------------- */
+function queueAutosave() {
+  dirty = true;
+  setStatus('Editing…');
+  if (autosaveTimer) clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(() => {
+    if (dirty) {
+      updateCurrentFromUI();
+      setStatus('Auto-saved');
+      setTimeout(()=> setStatus('Saved'), 900);
+    }
+  }, 3000); // 3 seconds
+}
+
+/* --------------------------- Word count --------------------------- */
+function countWords(text) {
+  const t = (text || '').trim();
+  if (!t) return 0;
+  return t.split(/\s+/).filter(Boolean).length;
+}
+function updateWordCount() {
+  const text = editable.innerText || '';
+  const words = countWords(text);
+  const chars = text.replace(/\n/g,'').length;
+  wordCount.textContent = `${words} ${words===1?'word':'words'} • ${chars} ${chars===1?'char':'chars'}`;
+}
+
+/* --------------------------- Export --------------------------- */
+function exportTxt() {
+  const title = (titleInput.value.trim() || 'Untitled').replace(/[\\/:*?"<>|]+/g,'_');
+  const blob = new Blob([editable.innerText], { type:'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${title}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=> {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 0);
+}
+
+/* --------------------------- Formatting --------------------------- */
+function exec(cmd, value=null) {
+  document.execCommand(cmd, false, value);
+  editable.focus();
+  queueAutosave();
+  updateWordCount();
+}
+
+/* --------------------------- Events --------------------------- */
+titleInput.addEventListener('input', queueAutosave);
+editable.addEventListener('input', () => { updateWordCount(); queueAutosave(); });
+
+$$('.toolbar .btn').forEach(b => {
+  b.addEventListener('click', () => {
+    const cmd = b.getAttribute('data-cmd');
+    const val = b.getAttribute('data-value');
+    if (!cmd) return;
+    if (cmd === 'formatBlock') exec(cmd, val || 'p'); else exec(cmd, null);
+  });
+});
+
+saveBtn.addEventListener('click', () => updateCurrentFromUI());
+exportBtn.addEventListener('click', exportTxt);
+deleteBtn.addEventListener('click', () => {
+  if (!currentId) return;
+  if (confirm('Delete this document? This cannot be undone.')) deleteCurrent();
+});
+newDocBtn.addEventListener('click', () => {
+  if (dirty) updateCurrentFromUI();
+  createDoc();
+});
+
+searchInput.addEventListener('input', e => renderList(e.target.value));
+
+/* Keyboard shortcuts */
+document.addEventListener('keydown', (e) => {
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && e.key.toLowerCase() === 's') { e.preventDefault(); updateCurrentFromUI(); }
+  if (mod && e.key.toLowerCase() === 'e') { e.preventDefault(); exportTxt(); }
+  if (mod && e.key.toLowerCase() === 'n') { e.preventDefault(); newDocBtn.click(); }
+  if (mod && e.key.toLowerCase() === 'b') { e.preventDefault(); exec('bold'); }
+  if (mod && e.key.toLowerCase() === 'i') { e.preventDefault(); exec('italic'); }
+  if (mod && e.key.toLowerCase() === 'u') { e.preventDefault(); exec('underline'); }
+});
+
+/* --------------------------- Utilities --------------------------- */
+function escapeHtml(s='') {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* --------------------------- Boot --------------------------- */
+function firstRunHint() {
+  if (docs.length === 0) {
+    createDoc();
+    titleInput.value = 'Welcome to Trufseeka';
+    editable.innerHTML = `
+<h2>What It Is</h2>
+<p>A digital workspace for rigorous truth-seeking and scientific research.</p>
+<h3>Current Capabilities — Writing Editor</h3>
+<ul>
+  <li>Create unlimited documents</li>
+  <li>Autosave every 3 seconds</li>
+  <li>Manual save and export to .txt</li>
+  <li>Real-time word count</li>
+  <li>Document library with dates</li>
+  <li>Full-text editing with shortcuts</li>
+  <li>Data persists across sessions</li>
+</ul>
+<p class="muted">Planned features are stubbed as tabs above.</p>`;
+    updateCurrentFromUI();
+  } else {
+    // open most recently updated
+    const recent = docs.sort((a,b)=> new Date(b.updatedAt)-new Date(a.updatedAt))[0];
+    openDoc(recent.id);
+  }
+  renderList('');
+}
+firstRunHint();
+</script>
+</body>
 </html>
